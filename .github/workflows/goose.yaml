@@ -1,0 +1,45 @@
+name: Goose Do It
+
+on:
+  # Trigger the workflow on specific GitHub issue events
+  issues:
+    types:
+      - labeled
+
+jobs:
+  ask-goose:
+    # Run this job only if the issue label is 'goose'
+    if: github.event.label.name == 'goose'
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository to get the latest code
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      # Set up Ruby environment (you can change Ruby to another tool if needed)
+      - name: Set up Ruby or whatever you need
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2' # Specify the Ruby version you need here
+
+
+      # Run the Goose Action (you can adjust this to fit your specific action)
+      - name: Run Goose Action
+        uses: michaelneale/goose-fix-it-action@v7
+        with:
+          # Passing the issue's title and body to the action
+          task_request: |
+            ${{ github.event.issue.title }}
+            
+            ${{ github.event.issue.body }}
+            
+            # Link back to the issue in the PR description
+            [Link to issue](${{ github.event.issue.html_url }})
+          # Validation task for the action (in this case, running tests)
+          validation: "PLEASE CHANGE ME"
+          # Optionally create a pull request after processing the issue
+          create_pr: 'true'
+        env:
+          # API key required for the Goose Action (stored in GitHub Secrets)
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
