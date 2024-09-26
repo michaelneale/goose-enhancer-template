@@ -26,7 +26,7 @@ jobs:
 
       # Run the Goose Action (you can adjust this to fit your specific action)
       - name: Run Goose Action
-        uses: michaelneale/goose-fix-it-action@v7
+        uses: michaelneale/goose-fix-it-action@v10
         with:
           # Passing the issue's title and body to the action
           task_request: |
